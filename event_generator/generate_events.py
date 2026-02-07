@@ -1,9 +1,14 @@
 import random
 import uuid
-from datetime import datetime,UTC
+from datetime import datetime,UTC,timedelta
 import json
 
 EVENTS = ["view", "click", "add_to_cart", "purchase"]
+
+
+def random_timestamp():
+    days_ago = random.randint(0, 14)  # last 15 days
+    return datetime.now(UTC) - timedelta(days=days_ago)
 
 def generate_event(user_id):
     event_type = random.choices(
@@ -15,7 +20,7 @@ def generate_event(user_id):
         "event_id": str(uuid.uuid4()),
         "user_id": user_id,
         "event_type": event_type,
-        "timestamp": datetime.now(UTC).isoformat(),
+        "timestamp": random_timestamp().isoformat(),
         "device": random.choice(["web", "mobile"]),
         "country": random.choice(["US", "IN", "CA", "UK"]),
         "amount": round(random.uniform(10, 200), 2) if event_type == "purchase" else None
